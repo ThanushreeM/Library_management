@@ -1,0 +1,470 @@
+
+
+/*program containing definitions of functions in main.c*/
+#include"project.h"
+#include<string.h>
+#include<stdlib.h>
+#define userName "thanu"
+#define passWord "shree"
+
+int a=3;
+
+/*Library structure*/
+typedef struct Library
+{
+    char book_name[200];
+    char author_name[250];
+    int book_id;
+    char status[20];
+    struct Library *next;
+}Library;
+
+
+//pointer of type Library
+Library *head;
+
+int count;//to count number of nodes
+/*Function to check login credentials*/
+ int check_login_credentials(char *ptr_name,char *ptr_password)
+ {
+     if((strcmp(ptr_name,userName)==0) && (strcmp(ptr_password,passWord)==0))
+     {
+         return 1;
+     }
+     else
+        return 0;
+ }
+
+
+ /*Function to display menu*/
+ void menu()
+ {
+     system("cls");
+     printf("\nMain menu\n");
+     printf("***************************************************************");
+
+     printf("\n1.Add book\n2.Edit book\n3.Delete Book\n4.View book");
+     printf("\n5.Search book\n6.Issue book\n7.Exit\n8.Return book\n");
+ }
+
+
+/*Function to add book to library*/
+ void Add_book()
+ {
+     char title[200],author[250];
+     Library *book_ptr;
+     Library *last;//to point to last node of the list
+     int id;//book id
+
+     //Allocating memory to book_ptr dynamically to add books to library
+     book_ptr=(struct Library*)malloc(sizeof(Library));
+
+
+    printf("\nPlease enter valid Book id, title,Author of that particular book\n");
+    printf("-------------------------------");
+    printf("\nPlease enter the book Id\n");
+    scanf("%d",&id);
+
+    printf("\n-------------------------------");
+
+     printf("\nBook name: ");
+     scanf(" %[^\n]s",title);
+     printf("\n-------------------------------");
+     printf("\nAuthor: ");
+     scanf(" %[^\n]s",author);
+     printf("\n-------------------------------");
+
+
+     book_ptr->next=NULL;
+     strcpy(book_ptr->book_name,title);
+     strcpy(book_ptr->author_name,author);
+     strcpy(book_ptr->status,"available");
+
+     book_ptr->book_id=id;
+
+     if(head==NULL)
+     {
+         head=book_ptr;
+     }
+     else
+        {
+
+            last=head;
+            while(last->next!=NULL)
+            {
+                last=last->next;
+
+            }
+
+
+            last->next=book_ptr;
+        }
+
+ }
+
+
+ /*Function to edit book in library*/
+ int Edit_book()
+ {
+     int decision;
+     system("cls");//function to clear screen
+     printf("------------------------------------------------------------------------------------------------------\n");
+     printf("\nSorry you cannot edit  the book in the library\n");
+     printf("------------------------------------------------------------------------------------------------------\n");
+     printf("\nTo go back to the main menu press 1\n To exit please press any other number\n");
+     scanf("%d",&decision);
+
+return decision;
+ }
+
+
+ /*Function to display book in Library*/
+void view()
+{
+    int i=1;//book number
+    struct Library *display;
+    display=head;
+
+    if(head==NULL)
+    {
+        printf("\nPlease add book to view\n");
+    }
+    else
+    {
+        printf("\nBooks in library:  \n");
+    printf("\nBook name|\t\tAuthor|\t\tBook ID|\tStatus|\n");
+        printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    while(display!=NULL)
+    {
+        printf("\n%d.%s|\t\t%s|\t\t%d|\t\t%s|\n",i,display->book_name,display->author_name,display->book_id,display->status);
+        display=display->next;
+        i++;
+    }
+    }
+}
+
+
+//Function to search book
+void searchBook()
+{
+    int like;//user input
+    char name[200],author[200];
+    struct Library *search;
+    int len;//to find length of book_name
+    search=head;
+    int is_present=0;//to check book is present or not
+int again=0;//used in case of mistake
+
+if(head==NULL)
+{
+    printf("\nLibrary is empty\n");
+
+}
+else{
+    printf("\nIf you like to search book by title press 1\nsearch by author press2\n");
+    scanf("%d",&like);
+
+    if(like==1)
+    {
+     try_again: printf("\nPlease enter book title\n");
+    scanf("%s",name);
+
+    len=strlen(name);
+
+    printf("\nSearch result:\n");
+    while(search!=NULL)
+    {
+        if(strncmp(search->book_name,name,len)==0)
+        {
+            printf("\n%s",search->book_name);
+            ++is_present;
+        }
+        search=search->next;
+    }
+    if(is_present==0)
+    {
+        printf("\nNo such book found\nDo you want to try again press1 \n if no press any other number\n");
+        scanf("%d",&again);
+        if(again==1)
+                goto try_again;
+        else
+            return;
+    }
+    }
+is_present=0;
+    if(like==2)
+    {
+        printf("\nPlease enter author name");
+    scanf("%s",author);
+
+    len=strlen(author);
+
+    printf("\nSearch result:\n");
+    while(search!=NULL)
+    {
+        if(strncmp(search->author_name,author,len)==0)
+        {
+            printf("\n%s",search->book_name);
+            ++is_present;
+        }
+        search=search->next;
+    }
+        if(is_present==0)
+    {
+        printf("\nNo such book found\nDo you want to try again press1 \n if no press any other number\n");
+        scanf("%d",&again);
+        if(again==1)
+                goto try_again;
+        else
+            return;
+    }
+    }
+}
+}
+
+
+
+
+
+
+/*Function to delete book from library*/
+void Delete_book()
+{
+    int del_book_num,counter=0;//number of book to be deleted
+    struct Library *temp,*last;
+    struct Library *print;
+    temp=head;
+    print=head;
+    if(head==NULL)
+    {
+        printf("\nThere are no books in library \n");
+        return;
+    }
+
+
+    if(head!=NULL)
+    {
+        view();
+        struct Library *t;
+        t=head;
+        while(t!=NULL)
+        {
+            ++counter;
+            t=t->next;
+        }
+    here:printf("\nSelect the book to be deleted\nby entering the number preceding  the book\n");
+
+        scanf("%d",&del_book_num);
+
+        switch(counter)
+        {
+        case 1:
+            if(strcmp(head->status,"issued")==0)
+            {
+                printf("\nBook is issued\ncan't be deleted\n");
+            }
+            else if(del_book_num>1)
+            {
+                printf("\nDeletion not possible\n");
+                goto here;
+            }
+            else
+            {
+                head=temp->next;
+            free(temp);
+            printf("\nbook %d deleted successfully\n",del_book_num);
+            }
+            break;
+
+        case 2:
+            if(del_book_num>2)
+            {
+                printf("\nOnly 2 books are there\n");
+                goto here;
+            }
+            if(del_book_num==1)
+            {
+            if(strcmp(head->status,"issued")==0)
+            {
+                printf("\nBook is issued\ncan't be deleted\n");
+            }
+            else
+            head=head->next;
+            while(print!=NULL)
+            {
+                printf("\nbook name=%s  author name=%s  id=%d   status=%s\n",print->book_name,print->author_name,print->book_id,print->status);
+                print=print->next;
+            }
+            }
+
+            if(del_book_num==2)
+            {
+              if(strcmp(head->next->status,"issued")==0)
+            {
+                printf("\nBook is issued\ncan't be deleted\n");
+            }
+            }
+            else{
+              head->next=NULL;
+            while(print!=NULL)
+            {
+                 printf("\nbook name=%s  author name=%s  id=%d   status=%s\n",print->book_name,print->author_name,print->book_id,print->status);
+                print=print->next;
+            }
+
+        printf("\nbook %d deleted successfully\n",del_book_num);}
+        break;
+
+        case 3:
+            if(del_book_num>3)
+            {
+                printf("\nOnly 3 books are there\n");
+                goto here;
+            }
+            if(del_book_num==1)
+            {
+            if(strcmp(head->status,"issued")==0)
+            {
+                printf("\nBook is issued\ncan't be deleted\n");
+            }
+            else
+                head=head->next;
+            while(print!=NULL)
+            {
+                 printf("\nbook name=%s  author name=%s  id=%d   status=%s\n",print->book_name,print->author_name,print->book_id,print->status);
+                print=print->next;
+            }
+
+            }
+
+            if(del_book_num==2)
+            {
+                last=head;
+                for(int i=1;i<(del_book_num);i++)
+                {
+                    last=last->next;
+                }
+
+
+            if(strcmp(last->status,"issued")==0)
+            {
+                printf("\nBook is issued\ncan't be deleted\n");
+                return;
+            }
+            else
+            head->next=last->next;
+                while(print!=NULL)
+            {
+ printf("\nbook name=%s  author name=%s  id=%d   status=%s\n",print->book_name,print->author_name,print->book_id,print->status);
+                print=print->next;
+            }
+            }
+
+            if(del_book_num==3)
+            {
+                if(strcmp(head->next->next->status,"issued")==0)
+            {
+                printf("\nBook is issued\ncan't be deleted\n");
+            }
+            else
+                head->next->next=NULL;
+            while(print!=NULL)
+            {
+ printf("\nbook name=%s  author name=%s  id=%d   status=%s\n",print->book_name,print->author_name,print->book_id,print->status);
+                print=print->next;
+            }
+
+            }
+
+            break;
+
+            }
+        }
+}
+
+
+void issue_book()
+{
+    view();
+    int want=0;
+    struct Library *issue,*temp;
+    int press=0;//user input
+    issue=head;
+
+    if(head==NULL)
+    {
+        printf("\nLibrary is empty\n");
+    }
+else{
+count=0;//global variable
+    temp=head;
+    while(temp!=NULL)
+    {
+        ++count;//to know number of books in library
+        temp=temp->next;
+    }
+
+  enter:  printf("\nPlease select the book you want\nby entering the serial number\nthat is the number preceding the book name \n");
+    scanf("%d",&want);
+
+    if(want<=count)
+    {
+       for(int i=1;i<want;i++)
+    {
+        issue=issue->next;
+    }
+    }
+
+    else
+    {
+        printf("\nInvalid input\n");
+        printf("\nOnly %d books available\n",count);
+        printf("\nTo try again press1 else press any other number\n");
+        scanf("%d",&press);
+        if(press==1)
+            goto enter;
+        else
+            return;
+    }
+
+    if(strcmp(issue->status,"issued")==0)
+    {
+        printf("\nSorry book is not available\n");
+    }
+    else
+    {
+        strcpy(issue->status,"issued");
+    printf("\nBook has been issued to you\n");
+    }
+}
+}
+
+
+void return_book()
+{
+    char book[200];
+    int lib_book=0;
+ Library *check;
+ check=head;
+ printf("\nPlease enter the book you want to return\n");
+ scanf("%s",book);
+
+ while(check!=NULL)
+ {
+     if(strcmp(check->book_name,book)==0)
+     {
+         ++lib_book;
+         break;
+     }
+     check=check->next;
+ }
+ if(lib_book==0)
+ {
+     printf("\nSorry %s is not library's book\n",book);
+ }
+ else
+    if(lib_book!=0)
+ {
+     strcpy(check->status,"available");
+ }
+}

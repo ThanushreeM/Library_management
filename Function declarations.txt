@@ -1,0 +1,17 @@
+/*This is the header file containing the declarations of functions in main.c*/
+
+
+//Function Declarations
+ int check_login_credentials(char *ptr_name,char *ptr_password);
+ void menu();
+
+ void exit_library();
+ void Add_book();
+ int Edit_book();
+ void issue_book();
+ void Delete_book();
+
+ void view();
+
+void searchBook();
+void return_book();

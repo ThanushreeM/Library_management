@@ -1,0 +1,201 @@
+
+
+
+
+
+
+
+
+/*C program for library management*/
+#include<stdio.h>
+#include<string.h>
+#include"project.h"
+
+
+int main()
+{
+    int counter=0,total_attempts=5;//To govern number of times login credentials to be entered
+    //for failed attempts
+    int validation;//To validate login credentials by user
+    char user_name[100],password[100];
+    printf("\t\tWelcome to Library management\n");
+
+    printf("\nPlease enter Your user name and password to continue\n");
+another_attempt:  printf("\nUser name: ");
+    scanf("%s",user_name);
+
+    printf("\nPassword: ");
+    scanf("%s",password);
+    //if validation is 1 can continue using program
+    validation=check_login_credentials(user_name,password);
+
+    if(validation==1)
+    {
+        system("cls");
+        menu();
+    }
+    else
+    {
+        ++counter;
+    if(counter<=5)
+    {
+        printf("\nWrong username or password\nPlease try again\n\n");
+        printf("\nALERT!!: You have %d attempts left\n",total_attempts-counter);
+        goto another_attempt;
+    }
+    }
+
+    /*To perform the expected service calling that particular function choice*/
+     /* to select from available services*/
+choice: printf("\n\nPlease select from one of the following services\n ");
+  int select;
+   scanf("%d",&select);
+
+int book_return;
+int borrow;//to issue book
+int what;//variable for search operation
+int option;
+int selected;
+int decision;//To store users decision
+int wish;//services you wish from library management
+   switch(select)
+   {
+   case 1:
+         Add_book();
+         while(1)
+         {printf("\nIf you want to add more book press 1\npress 2 for main menu \nany other number to exit\n\n");
+         scanf("%d",&wish);
+         if(wish==1)
+         {
+             Add_book();
+         }
+        else if(wish==2)
+         {
+             menu();
+             goto choice;
+         }
+        else if(wish!=1 && wish!=2)
+         {
+             exit(0);
+         }}
+         break;
+
+   case 2:
+   decision = Edit_book();
+   if(decision==1)
+    {
+        menu();
+        goto choice;
+    }
+    else
+        exit(0);
+break;
+
+   case 3:
+    Delete_book();
+    while(1)
+    {
+         printf("\nTo go back to main menu press 1\nTo delete more books press 2\nTo exit press any other number\n");
+        scanf("%d",&selected);
+
+        if(selected == 2)
+        Delete_book();
+
+        if(selected==1)
+        {
+            menu();
+            goto choice;
+        }
+
+        if(selected>2)
+        exit(1);
+    }
+
+    break;
+
+   case 4:
+    view();
+    printf("\nTo go back to main menu press 1\nTo exit press any other number\n");
+    scanf("%d",&option);
+
+    if(option==1)
+    {
+        menu();
+        goto choice;
+    }
+    else
+        exit(1);
+    break;
+
+   case 5:
+    searchBook();
+    while(1)
+    {
+       printf("\nTo search another book press1\nTo go back to main menu press 2\nTo exit press any other number\n ");
+       scanf("%d",&what);
+       if(what==1)
+       {
+           searchBook();
+       }
+       if(what==2)
+       {
+           menu();
+           goto choice;
+       }
+       if(what>2)
+        exit(1);
+    }
+    break;
+
+
+   case 6:
+    issue_book();
+    while(1)
+    {
+        printf("\nTo go to main menu press 1\nTo exit press any other number\n\n");
+        scanf("%d",&borrow);
+
+        if(borrow==1)
+        {
+            menu();
+            goto choice;
+        }
+        if(borrow!=1)
+            exit(1);
+    }
+    break;
+
+    case 7:
+    exit(1);
+    break;
+
+    case 8:
+        return_book();
+    while(1)
+    {
+        printf("\nIf you want to return more books press1\nFor main menu press 2\n To exit press any other number\n");
+        scanf("%d",&book_return);
+
+        if(book_return==1)
+        {
+            return_book();
+        }
+        else if(book_return==2)
+        {
+            menu();
+            goto choice;
+        }
+        else if(book_return>2)
+            exit(0);
+    }
+    break;
+   }
+    return 0;
+}
+
+
+
+
+
+
+
